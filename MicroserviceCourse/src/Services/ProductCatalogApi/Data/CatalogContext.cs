@@ -12,7 +12,6 @@ namespace ProductCatalogApi.Data
     {
         public CatalogContext(DbContextOptions options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -47,12 +46,29 @@ namespace ProductCatalogApi.Data
 
         private void ConfigureCatalogType(EntityTypeBuilder<CatalogType> builder)
         {
-            builder.ToTable("Catalog");
+            builder.ToTable("CatalogType");
+            builder.Property(c => c.Id)
+                .ForSqlServerUseSequenceHiLo("catalog_type_hilo")
+                .IsRequired(true);
+            builder.Property(c => c.Type)
+                .IsRequired(true)
+                .HasMaxLength(100);
         }
 
         private void ConfigureCatalogBrand(EntityTypeBuilder<CatalogBrand> builder)
         {
-            builder.ToTable("Catalog");
+            builder.ToTable("CatalogBrand");
+            builder.Property(c => c.Id)
+                .ForSqlServerUseSequenceHiLo("catalog_brand_hilo")
+                .IsRequired(true);
+            builder.Property(c => c.Brand)
+                .IsRequired(true)
+                .HasMaxLength(100);
         }
+
+        public DbSet<CatalogType> CatalogTypes { get; set; }
+        public DbSet<CatalogBrand> CatalogBrands { get; set; }
+        public DbSet<CatalogItem> CatalogItems { get; set; }
+
     }
 }
